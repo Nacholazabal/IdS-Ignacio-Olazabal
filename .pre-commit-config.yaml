@@ -1,0 +1,33 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+    - id: check-case-conflict
+    - id: check-merge-conflict
+
+- repo: https://github.com/pre-commit/mirrors-clang-format
+  rev: v15.0.6
+  hooks:
+    - id: clang-format
+      name: Formatting Cpp files with Clang-format
+
+# --- Static analysis with cppcheck ---
+- repo: https://github.com/pre-commit/mirrors-cppcheck
+  rev: v2.13.9
+  hooks:
+    - id: cppcheck
+      name: cppcheck (C)
+      args:
+        - --enable=warning,style,performance,portability
+        - --std=c11
+        - --inline-suppr
+        - --error-exitcode=1
+        - -I
+        - inc
+        - -i
+        - build
+      files: \.(c|h)$
+      exclude: ^build/
