@@ -1,25 +1,24 @@
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.3.0
-  hooks:
-    - id: check-yaml
-    - id: end-of-file-fixer
-    - id: trailing-whitespace
-    - id: check-case-conflict
-    - id: check-merge-conflict
-
-- repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v15.0.6
+- repo: local
   hooks:
     - id: clang-format
-      name: Formatting Cpp files with Clang-format
+      name: clang-format
+      entry: clang-format
+      language: system
+      files: \.(c|h)$
+      args: ['-i']
 
-# --- Static analysis with cppcheck ---
-- repo: https://github.com/pre-commit/mirrors-cppcheck
-  rev: v2.13.9
-  hooks:
+    - id: clang-tidy
+      name: clang-tidy
+      entry: bash -c 'for file in "$@"; do clang-tidy "$file" --header-filter=.* -- -Iinc; done' --
+      language: system
+      files: ^src/.*\.(c)$
+
     - id: cppcheck
-      name: cppcheck (C)
+      name: cppcheck
+      entry: cppcheck
+      language: system
+      files: \.(c|h)$
       args:
         - --enable=warning,style,performance,portability
         - --std=c11
@@ -27,7 +26,15 @@ repos:
         - --error-exitcode=1
         - -I
         - inc
-        - -i
-        - build
-      files: \.(c|h)$
-      exclude: ^build/
+
+    - id: trailing-whitespace
+      name: trim trailing whitespace
+      entry: sed -i 's/[[:space:]]*$//'
+      language: system
+      files: \.(c|h|yml|yaml|md)$
+
+    - id: end-of-file-fixer
+      name: fix end of files
+      entry: bash -c 'for file in "$@"; do if [[ -s "$file" ]]; then tail -c1 "$file" | read -r _ || echo >> "$file"; fi; done' --
+      language: system
+      files: \.(c|h|yml|yaml|md)$

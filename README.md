@@ -4,7 +4,7 @@ Este repositorio corresponde a la materia **Ingeniería de Software** del cohort
 
 ## Uso del repositorio
 
-Este repositorio utiliza [pre-commit](https://pre-commit.com) para validaciones de formato.  
+Este repositorio utiliza [pre-commit](https://pre-commit.com) para validaciones de formato.
 Para trabajar con el mismo usted debería tener instalado:
 
 1. [pre-commit](https://pre-commit.com/#install)
