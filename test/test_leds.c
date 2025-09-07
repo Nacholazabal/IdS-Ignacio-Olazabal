@@ -18,8 +18,12 @@ tratar de manipular un led fuera de rango y comprobar que se genera un error
 #include "leds.h"
 #include "unity.h"
 
+static uint16_t puerto_virtual;  // Esto es un mockup del puerto de HW
+
 void setUp(void)
 {
+    puerto_virtual = 0x0000;
+    leds_init(&puerto_virtual);
 }
 
 void tearDown(void)
@@ -29,7 +33,7 @@ void tearDown(void)
 // iniciar el driver y revisar que todos los leds esten apagados
 void test_LedsDriver_IniciaConTodosLosLedsApagados(void)
 {
-    uint16_t puerto_virtual = 0xFFFF;  // Esto es un mockup del puerto de HW
+    puerto_virtual = 0xFFFF;  // Esto es un mockup del puerto de HW
     leds_init(&puerto_virtual);
     TEST_ASSERT_EQUAL_HEX16(0x0000, puerto_virtual);
 }
@@ -37,8 +41,6 @@ void test_LedsDriver_IniciaConTodosLosLedsApagados(void)
 // prender un led y verificar que no cambia el resto
 void test_LedsDriver_PrendeUnLed(void)
 {
-    uint16_t puerto_virtual = 0x0000;  // Esto es un mockup del puerto de HW
-    leds_init(&puerto_virtual);
     leds_turn_on(3);
     TEST_ASSERT_EQUAL_HEX16(1 << 2, puerto_virtual);
 }
@@ -46,8 +48,6 @@ void test_LedsDriver_PrendeUnLed(void)
 // prender un led y apagarlo cualquiera
 void test_LedsDriver_PrendeYApagaUnLed(void)
 {
-    uint16_t puerto_virtual = 0x0000;  // Esto es un mockup del puerto de HW
-    leds_init(&puerto_virtual);
     leds_turn_on(5);
     TEST_ASSERT_EQUAL_HEX16(1 << 4, puerto_virtual);
     leds_turn_off(5);

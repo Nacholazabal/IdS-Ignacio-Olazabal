@@ -2,7 +2,7 @@
 
 static uint16_t* puerto;
 
-void             leds_init(uint16_t* puerto_virtual)
+void leds_init(uint16_t* puerto_virtual)
 {
     puerto  = puerto_virtual;
     *puerto = 0x0000;  // Inicializar todos los LEDs apagados
