@@ -33,3 +33,23 @@ void test_LedsDriver_IniciaConTodosLosLedsApagados(void)
     leds_init(&puerto_virtual);
     TEST_ASSERT_EQUAL_HEX16(0x0000, puerto_virtual);
 }
+
+// prender un led y verificar que no cambia el resto
+void test_LedsDriver_PrendeUnLed(void)
+{
+    uint16_t puerto_virtual = 0x0000;  // Esto es un mockup del puerto de HW
+    leds_init(&puerto_virtual);
+    leds_turn_on(3);
+    TEST_ASSERT_EQUAL_HEX16(1 << 2, puerto_virtual);
+}
+
+// prender un led y apagarlo cualquiera
+void test_LedsDriver_PrendeYApagaUnLed(void)
+{
+    uint16_t puerto_virtual = 0x0000;  // Esto es un mockup del puerto de HW
+    leds_init(&puerto_virtual);
+    leds_turn_on(5);
+    TEST_ASSERT_EQUAL_HEX16(1 << 4, puerto_virtual);
+    leds_turn_off(5);
+    TEST_ASSERT_EQUAL_HEX16(0x0000, puerto_virtual);
+}
