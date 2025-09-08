@@ -8,11 +8,11 @@ prender algunos leds, despues prender todos y comprobar que todos los leds queda
 prender todos, apagar algunos, apagar todos y comprobar que todos los leds quedan apagados
 consultar el estado de un led encendido y comprobar que es correcto
 consultar el estado de un led apagado y comprobar que es correcto
-tratar de manipular un led fuera de rango y comprobar que se genera un error
 */
 
 #include "leds.h"
 #include "leds_private.h"  // Para constantes de testing
+#include "mock_errores.h"  // Mock generado automáticamente por Ceedling
 #include "unity.h"
 
 static uint16_t puerto_virtual;  // Esto es un mockup del puerto de HW
@@ -75,9 +75,90 @@ void test_LedsDriver_PrenderPrimerYUltimoLed(void)
 // tratar de manipular un led fuera de rango y comprobar que no cambia nada
 void test_LedsDriver_LedFueraDeRangoNoHaceNada(void)
 {
-    leds_turn_on(LED_INVALIDO_BAJO);
+    registrar_error_ExpectAnyArgs();
+    leds_turn_on(0);
     TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_APAGADOS, puerto_virtual);
 
-    leds_turn_on(LED_INVALIDO_ALTO);
+    registrar_error_ExpectAnyArgs();
+    leds_turn_on(CANTIDAD_DE_LEDS + 1);
     TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_APAGADOS, puerto_virtual);
+}
+
+// prender todos los leds
+void test_LedsDriver_PrenderTodosLosLeds(void)
+{
+    leds_turn_on_all();
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_PRENDIDOS, puerto_virtual);
+}
+
+// prender y apagar todos los leds
+void test_LedsDriver_PrenderYApagarTodosLosLeds(void)
+{
+    leds_turn_on_all();
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_PRENDIDOS, puerto_virtual);
+
+    leds_turn_off_all();
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_APAGADOS, puerto_virtual);
+}
+
+// prender algunos leds mas de una vez y verificar que sigue prendido
+void test_LedsDriver_PrenderLedVariasVeces(void)
+{
+    leds_turn_on(5);
+    leds_turn_on(5);                                  // Prender de nuevo
+    leds_turn_on(5);                                  // Y otra vez
+    TEST_ASSERT_EQUAL_HEX16(1 << 4, puerto_virtual);  // Debe seguir prendido solo ese LED
+}
+
+// apagar algunos leds mas de una vez y verificar que siguen apagados
+void test_LedsDriver_ApagarLedVariasVeces(void)
+{
+    leds_turn_on(3);
+    TEST_ASSERT_EQUAL_HEX16(1 << 2, puerto_virtual);
+
+    leds_turn_off(3);
+    leds_turn_off(3);  // Apagar de nuevo
+    leds_turn_off(3);  // Y otra vez
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_APAGADOS, puerto_virtual);
+}
+
+// prender algunos leds, despues prender todos y comprobar que todos los leds quedan prendidos
+void test_LedsDriver_PrenderAlgunosLuegoTodos(void)
+{
+    leds_turn_on(2);
+    leds_turn_on(5);
+    TEST_ASSERT_EQUAL_HEX16((1 << 1) | (1 << 4), puerto_virtual);
+
+    leds_turn_on_all();  // Prender todos
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_PRENDIDOS, puerto_virtual);
+}
+
+// prender todos, apagar algunos, apagar todos y comprobar que todos los leds quedan apagados
+void test_LedsDriver_PrenderTodosApagarAlgunosApagarTodos(void)
+{
+    leds_turn_on_all();
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_PRENDIDOS, puerto_virtual);
+
+    leds_turn_off(3);
+    leds_turn_off(7);
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_PRENDIDOS & ~((1 << 2) | (1 << 6)), puerto_virtual);
+
+    leds_turn_off_all();
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_APAGADOS, puerto_virtual);
+}
+
+// consultar el estado de un led encendido y comprobar que es correcto
+void test_LedsDriver_ConsultarLedEncendido(void)
+{
+    leds_turn_on(4);
+    TEST_ASSERT_TRUE(leds_is_on(4));
+    TEST_ASSERT_FALSE(leds_is_off(4));
+}
+
+// consultar el estado de un led apagado y comprobar que es correcto
+void test_LedsDriver_ConsultarLedApagado(void)
+{
+    leds_turn_off(6);  // Asegurar que está apagado
+    TEST_ASSERT_TRUE(leds_is_off(6));
+    TEST_ASSERT_FALSE(leds_is_on(6));
 }
