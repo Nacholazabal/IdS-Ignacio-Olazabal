@@ -73,7 +73,7 @@ typedef enum {
  *
  * \return true if initialization was successful, false otherwise
  */
-bool        gpio_init(void);
+bool gpio_init(void);
 
 /**
  * \brief Turn on a specific LED
@@ -84,7 +84,7 @@ bool        gpio_init(void);
  * \param[in] led_id LED identifier (LED_RED, LED_GREEN, etc.)
  * \return true if LED was turned on successfully, false otherwise
  */
-bool        gpio_led_on(uint8_t led_id);
+bool gpio_led_on(uint8_t led_id);
 
 /**
  * \brief Turn off a specific LED
@@ -95,7 +95,7 @@ bool        gpio_led_on(uint8_t led_id);
  * \param[in] led_id LED identifier (LED_RED, LED_GREEN, etc.)
  * \return true if LED was turned off successfully, false otherwise
  */
-bool        gpio_led_off(uint8_t led_id);
+bool gpio_led_off(uint8_t led_id);
 
 /**
  * \brief Toggle a specific LED
@@ -106,7 +106,7 @@ bool        gpio_led_off(uint8_t led_id);
  * \param[in] led_id LED identifier (LED_RED, LED_GREEN, etc.)
  * \return true if LED was toggled successfully, false otherwise
  */
-bool        gpio_led_toggle(uint8_t led_id);
+bool gpio_led_toggle(uint8_t led_id);
 
 /**
  * \brief Get the current state of a LED
@@ -125,14 +125,14 @@ led_state_t gpio_led_get_state(uint8_t led_id);
  *
  * \return true if all LEDs were turned off successfully, false otherwise
  */
-bool        gpio_all_leds_off(void);
+bool gpio_all_leds_off(void);
 
 /**
  * \brief Display the status of all LEDs
  *
  * This function prints the current status of all LEDs to the console.
  */
-void        gpio_display_status(void);
+void gpio_display_status(void);
 
 /* === End of documentation ==================================================================== */
 

@@ -48,7 +48,7 @@ static led_state_t led_states[MAX_LEDS];
 static const char* led_names[MAX_LEDS] = {"RED", "GREEN", "BLUE", "YELLOW"};
 
 /** \brief Flag to indicate if GPIO module has been initialized */
-static bool        gpio_initialized    = false;
+static bool gpio_initialized           = false;
 
 /* === Private function declarations =========================================================== */
 
@@ -60,7 +60,7 @@ static bool        gpio_initialized    = false;
  * \param[in] led_id LED identifier to validate
  * \return true if LED ID is valid, false otherwise
  */
-static bool        is_valid_led_id(uint8_t led_id);
+static bool is_valid_led_id(uint8_t led_id);
 
 /* === Public variable definitions ============================================================= */
 
@@ -68,7 +68,7 @@ static bool        is_valid_led_id(uint8_t led_id);
 
 /* === Private function implementation ========================================================= */
 
-static bool        is_valid_led_id(uint8_t led_id)
+static bool is_valid_led_id(uint8_t led_id)
 {
     return (led_id < MAX_LEDS);
 }
