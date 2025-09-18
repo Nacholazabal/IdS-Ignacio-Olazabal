@@ -9,6 +9,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
 
     steps:
     - name: Checkout code
@@ -95,34 +99,42 @@ jobs:
     - name: Comment PR with results
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v6
+      continue-on-error: true
       with:
         script: |
-          const comment = `## 📊 Resultados de CI/CD
+          try {
+            const comment = \`## 📊 Resultados de CI/CD
 
-          ### ✅ Tests Unitarios
-          - **Estado:** Todos los tests pasaron correctamente
-          - **Framework:** Ceedling + Unity + CMock
+            ### ✅ Tests Unitarios
+            - **Estado:** Todos los tests pasaron correctamente
+            - **Framework:** Ceedling + Unity + CMock
 
-          ### 🎯 Cobertura de Código
-          - **Estado:** Reporte generado (ver artifacts)
-          - **Herramienta:** gcov + Ceedling
+            ### 🎯 Cobertura de Código
+            - **Estado:** Reporte generado (ver artifacts)
+            - **Herramienta:** gcov + Ceedling
 
-          ### 🔍 Verificaciones
-          - **Formato:** clang-format ejecutado
-          - **Análisis estático:** clang-tidy y cppcheck ejecutados
+            ### 🔍 Verificaciones
+            - **Formato:** clang-format ejecutado
+            - **Análisis estático:** clang-tidy y cppcheck ejecutados
 
-          ### 📁 Artifacts
-          - Los resultados detallados están disponibles en los artifacts de este workflow
+            ### 📁 Artifacts
+            - Los resultados detallados están disponibles en los artifacts de este workflow
 
-          ---
-          *🤖 Este comentario fue generado automáticamente por el pipeline de CI/CD*`;
+            ---
+            *🤖 Este comentario fue generado automáticamente por el pipeline de CI/CD*\`;
 
-          await github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: comment
-          });
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+            console.log('✅ Comentario del PR creado exitosamente');
+          } catch (error) {
+            console.log('⚠️ No se pudo crear el comentario del PR:', error.message);
+            console.log('El workflow continuará sin problemas.');
+          }
 
     - name: Upload coverage to Codecov
       uses: actions/upload-artifact@v4
