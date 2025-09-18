@@ -25,6 +25,9 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential gcc lcov clang-format clang-tidy cppcheck
 
+    - name: Install gcovr
+      run: pip install gcovr
+
     - name: Install Ceedling
       run: |
         gem install ceedling
