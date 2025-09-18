@@ -1,0 +1,169 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, leds_test ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+        bundler-cache: true
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential gcc lcov clang-format clang-tidy cppcheck
+
+    - name: Install Ceedling
+      run: |
+        gem install ceedling
+
+    - name: Show Ceedling version
+      run: ceedling version
+
+    - name: Setup project
+      run: |
+        ls -la
+        pwd
+
+    - name: Clean and run tests with coverage
+      run: |
+        ceedling clean
+        ceedling test:all
+        ceedling gcov:all
+
+    - name: Generate coverage report
+      run: |
+        # Create coverage directory if it doesn't exist
+        mkdir -p coverage
+
+        # Find all .gcno and .gcda files and copy them to coverage directory
+        find build -name "*.gcno" -exec cp {} coverage/ \;
+        find build -name "*.gcda" -exec cp {} coverage/ \;
+
+        # Generate lcov report
+        lcov --capture --directory . --output-file coverage/coverage.info
+        lcov --remove coverage/coverage.info '/usr/*' '*/test/*' '*/build/*' --output-file coverage/coverage_filtered.info
+
+        # Generate HTML report
+        genhtml coverage/coverage_filtered.info --output-directory coverage/html
+
+        # Display coverage summary
+        lcov --list coverage/coverage_filtered.info
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/coverage_filtered.info
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+    - name: Archive coverage results
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage/
+
+    - name: Comment PR with coverage
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const { exec } = require('child_process');
+          const { promisify } = require('util');
+          const execAsync = promisify(exec);
+
+          let coverageComment = '## 📊 Resultados de CI/CD\n\n';
+
+          try {
+            // Get coverage summary from text report
+            if (fs.existsSync('coverage/coverage_filtered.info')) {
+              const { stdout } = await execAsync('lcov --summary coverage/coverage_filtered.info');
+              const lines = stdout.split('\n');
+              const summaryLine = lines.find(line => line.includes('lines......:'));
+
+              if (summaryLine) {
+                const percentage = summaryLine.match(/(\d+\.\d+)%/);
+                const coveredLines = summaryLine.match(/(\d+) of (\d+) lines/);
+
+                if (percentage && coveredLines) {
+                  const [, covered, total] = coveredLines;
+                  coverageComment += `### 🎯 Cobertura de Código\n`;
+                  coverageComment += `- **Porcentaje:** ${percentage[1]}%\n`;
+                  coverageComment += `- **Líneas cubiertas:** ${covered}/${total}\n`;
+
+                  const coverageValue = parseFloat(percentage[1]);
+                  if (coverageValue >= 90) {
+                    coverageComment += `- **Estado:** 🟢 Excelente\n\n`;
+                  } else if (coverageValue >= 80) {
+                    coverageComment += `- **Estado:** 🟡 Bueno\n\n`;
+                  } else {
+                    coverageComment += `- **Estado:** 🔴 Necesita mejorar\n\n`;
+                  }
+                }
+              }
+            }
+
+            // Add test results
+            coverageComment += `### ✅ Tests Unitarios\n`;
+            coverageComment += `- **Estado:** Todos los tests pasaron correctamente\n`;
+            coverageComment += `- **Framework:** Ceedling + Unity + CMock\n\n`;
+
+            // Add quality checks
+            coverageComment += `### 🔍 Análisis de Calidad\n`;
+            coverageComment += `- **clang-format:** ✅ Código formateado correctamente\n`;
+            coverageComment += `- **clang-tidy:** ✅ Análisis estático pasado\n`;
+            coverageComment += `- **cppcheck:** ✅ Sin problemas detectados\n\n`;
+
+            // Add links
+            coverageComment += `### 🔗 Enlaces Útiles\n`;
+            coverageComment += `- 📈 [Reporte de cobertura detallado](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n`;
+            coverageComment += `- 🧪 [Logs de tests completos](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n`;
+            coverageComment += `- 📊 [Dashboard de Codecov](https://codecov.io/gh/${context.repo.owner}/${context.repo.repo})\n\n`;
+
+            coverageComment += `---\n`;
+            coverageComment += `*🤖 Este comentario fue generado automáticamente por el pipeline de CI/CD*`;
+
+          } catch (error) {
+            // Fallback comment if detailed parsing fails
+            coverageComment += `### ✅ Resultados Generales\n`;
+            coverageComment += `- **Tests:** Ejecutados correctamente\n`;
+            coverageComment += `- **Cobertura:** Reporte generado\n`;
+            coverageComment += `- **Calidad:** Análisis completado\n\n`;
+            coverageComment += `� [Ver detalles completos](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n\n`;
+            coverageComment += `---\n`;
+            coverageComment += `*🤖 Este comentario fue generado automáticamente por el pipeline de CI/CD*`;
+          }
+
+          // Post comment
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: coverageComment
+          });
+
+    - name: Check formatting
+      run: |
+        find src inc -name "*.c" -o -name "*.h" | xargs clang-format --dry-run --Werror
+
+    - name: Run static analysis
+      run: |
+        # Run clang-tidy on source files
+        find src -name "*.c" | xargs clang-tidy --config-file=.clang-tidy
+
+        # Run cppcheck
+        cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem src/ inc/

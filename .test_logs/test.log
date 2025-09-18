@@ -1,0 +1,70 @@
+🚧 Loaded project configuration from working directory.
+ > Using: /home/nacho/testing_software/IdS-Ignacio-Olazabal/project.yml
+ > Working directory: /home/nacho/testing_software/IdS-Ignacio-Olazabal
+
+Ceedling set up completed in 49 milliseconds
+
+👟 Preparing Build Paths...
+
+👟 Collecting Test Context
+--------------------------
+Parsing test_leds.c for build directive macros, #includes, and test case names...
+
+👟 Ingesting Test Configurations
+--------------------------------
+Collecting search paths, flags, and defines test_leds.c...
+
+👟 Determining Files to be Generated...
+
+👟 Mocking
+----------
+Generating mock for test_leds::errores.h...
+
+👟 Test Runners
+---------------
+Generating runner for test_leds.c...
+
+👟 Determining Artifacts to Be Built...
+
+👟 Building Objects
+-------------------
+Compiling test_leds.c...
+Compiling test_leds::leds.c...
+Compiling test_leds::mock_errores.c...
+Compiling test_leds::test_leds_runner.c...
+Compiling test_leds::unity.c...
+Compiling test_leds::cmock.c...
+
+👟 Building Test Executables
+----------------------------
+Linking test_leds.out...
+
+👟 Executing
+------------
+Running test_leds.out...
+test_leds.c:31:test_LedsDriver_IniciaConTodosLosLedsApagados:PASS
+test_leds.c:39:test_LedsDriver_PrendeUnLed:PASS
+test_leds.c:46:test_LedsDriver_PrendeYApagaUnLed:PASS
+test_leds.c:55:test_LedsDriver_PrendeVariosYApagaUno:PASS
+test_leds.c:66:test_LedsDriver_PrenderPrimerYUltimoLed:PASS
+test_leds.c:76:test_LedsDriver_LedFueraDeRangoNoHaceNada:PASS
+test_leds.c:88:test_LedsDriver_PrenderTodosLosLeds:PASS
+test_leds.c:95:test_LedsDriver_PrenderYApagarTodosLosLeds:PASS
+test_leds.c:105:test_LedsDriver_PrenderLedVariasVeces:PASS
+test_leds.c:114:test_LedsDriver_ApagarLedVariasVeces:PASS
+test_leds.c:126:test_LedsDriver_PrenderAlgunosLuegoTodos:PASS
+test_leds.c:137:test_LedsDriver_PrenderTodosApagarAlgunosApagarTodos:PASS
+test_leds.c:151:test_LedsDriver_ConsultarLedEncendido:PASS
+test_leds.c:159:test_LedsDriver_ConsultarLedApagado:PASS
+
+-----------------------
+14 Tests 0 Failures 0 Ignored 
+OK
+libgcov profiling error:/home/nacho/testing_software/IdS-Ignacio-Olazabal/build/test/out/test_leds/cmock.gcda:overwriting an existing profile data with a different timestamp
+libgcov profiling error:/home/nacho/testing_software/IdS-Ignacio-Olazabal/build/test/out/test_leds/unity.gcda:overwriting an existing profile data with a different timestamp
+libgcov profiling error:/home/nacho/testing_software/IdS-Ignacio-Olazabal/build/test/out/test_leds/test_leds_runner.gcda:overwriting an existing profile data with a different timestamp
+libgcov profiling error:/home/nacho/testing_software/IdS-Ignacio-Olazabal/build/test/out/test_leds/mock_errores.gcda:overwriting an existing profile data with a different timestamp
+libgcov profiling error:/home/nacho/testing_software/IdS-Ignacio-Olazabal/build/test/out/test_leds/leds.gcda:overwriting an existing profile data with a different timestamp
+libgcov profiling error:/home/nacho/testing_software/IdS-Ignacio-Olazabal/build/test/out/test_leds/test_leds.gcda:overwriting an existing profile data with a different timestamp
+
+Ceedling operations completed in 314 milliseconds

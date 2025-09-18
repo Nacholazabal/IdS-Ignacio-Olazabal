@@ -1,0 +1,15 @@
+Running test_leds.out...
+test_leds.c:31:test_LedsDriver_IniciaConTodosLosLedsApagados:PASS
+test_leds.c:39:test_LedsDriver_PrendeUnLed:PASS
+test_leds.c:46:test_LedsDriver_PrendeYApagaUnLed:PASS
+test_leds.c:55:test_LedsDriver_PrendeVariosYApagaUno:PASS
+test_leds.c:66:test_LedsDriver_PrenderPrimerYUltimoLed:PASS
+test_leds.c:76:test_LedsDriver_LedFueraDeRangoNoHaceNada:PASS
+test_leds.c:88:test_LedsDriver_PrenderTodosLosLeds:PASS
+test_leds.c:95:test_LedsDriver_PrenderYApagarTodosLosLeds:PASS
+test_leds.c:105:test_LedsDriver_PrenderLedVariasVeces:PASS
+test_leds.c:114:test_LedsDriver_ApagarLedVariasVeces:PASS
+test_leds.c:126:test_LedsDriver_PrenderAlgunosLuegoTodos:PASS
+test_leds.c:137:test_LedsDriver_PrenderTodosApagarAlgunosApagarTodos:PASS
+test_leds.c:151:test_LedsDriver_ConsultarLedEncendido:PASS
+test_leds.c:159:test_LedsDriver_ConsultarLedApagado:PASS
