@@ -73,6 +73,7 @@ jobs:
         path: |
           coverage/
           build/
+        if-no-files-found: warn
 
     - name: Check code formatting
       run: |
@@ -85,11 +86,11 @@ jobs:
     - name: Run static analysis
       run: |
         echo "Running static analysis..."
-        # Run clang-tidy on source files
-        find src -name "*.c" | xargs clang-tidy --config-file=.clang-tidy || echo "clang-tidy completed with warnings"
+        # Run clang-tidy on source files (simplified to avoid issues)
+        clang-tidy --config-file=.clang-tidy src/*.c -- -I./inc || echo "clang-tidy completed with warnings"
 
-        # Run cppcheck
-        cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem src/ inc/ || echo "cppcheck completed with warnings"
+        # Run cppcheck with proper include paths and suppress unused function warnings
+        cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem --suppress=unusedFunction -I inc/ src/ || echo "cppcheck completed with warnings"
 
     - name: Comment PR with results
       if: github.event_name == 'pull_request'

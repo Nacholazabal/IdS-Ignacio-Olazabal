@@ -12,5 +12,4 @@ Checks: >
   cppcoreguidelines-avoid-magic-numbers
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
-AnalyzeTemporaryDtors: false
 FormatStyle: none
