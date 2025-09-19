@@ -1,32 +1,56 @@
-# Trabajo Práctico Número 4
+# Repositorio de Ingeniería de Software y Testing de Software (cohorte 2025)
 
-Este repositorio corresponde a la materia **Ingeniería de Software** del cohorte 2024, alumno: **Ignacio Olazabal**.
+[![CI/CD Pipeline](https://github.com/Nacholazabal/IdS-Ignacio-Olazabal/actions/workflows/ci.yml/badge.svg)](https://github.com/Nacholazabal/IdS-Ignacio-Olazabal/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/Nacholazabal/IdS-Ignacio-Olazabal/branch/main/graph/badge.svg)](https://codecov.io/gh/Nacholazabal/IdS-Ignacio-Olazabal)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Uso del repositorio
+> **Materia:** Ingeniería de Software (2024) y Testing de Software (2025)
+> **Alumno:** Ignacio Olazabal
+> **Propósito:** Este repositorio fue creado para la materia de Ingeniería de Software y está siendo reutilizado para la materia de Testing de Software del cohorte 2025.
 
-Este repositorio utiliza [pre-commit](https://pre-commit.com) para validaciones de formato.  
-Para trabajar con el mismo usted debería tener instalado:
+---
 
-1. [pre-commit](https://pre-commit.com/#install)
+## 🚀 Requisitos y Dependencias
 
-Después de clonar el repositorio usted debería ejecutar el siguiente comando:
+Para poder clonar, compilar y ejecutar los tests de este proyecto necesitas instalar:
+
+- **Git**
+- **Ruby** (>= 3.1)
+- **Ceedling** (`gem install ceedling`)
+- **gcc** (compilador C)
+- **lcov** (para reportes de cobertura)
+- **clang-format** (formateo de código)
+- **clang-tidy** (análisis estático)
+- **cppcheck** (análisis estático)
+- **pre-commit** (`pip install pre-commit`)
+- **VS Code** (opcional, recomendado)
+- **Extensiones VS Code:**
+  - C/C++ Extension Pack
+  - clang-format
+
+### Instalación rápida en Ubuntu
 
 ```bash
-pre-commit install
+sudo apt update
+sudo apt install -y build-essential ruby gcc lcov clang-format clang-tidy cppcheck git
+sudo gem install ceedling
+pip install pre-commit
 ```
 
-Para generar la documentación del proyecto se utiliza el siguiente comando:
+## 📊 Cobertura actual
 
-```bash
-make doc
-```
+El estado de cobertura se actualiza automáticamente:
 
-Para `compilar` el proyecto se utiliza el siguiente comando:
+![codecov](https://codecov.io/gh/Nacholazabal/IdS-Ignacio-Olazabal/branch/main/graph/badge.svg)
 
-```bash
-make all
-```
+---
 
-## License
+## 🤖 Comentarios automáticos en Pull Requests
 
-This work is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+Cada vez que se abre un Pull Request, el pipeline de CI/CD ejecuta los tests y genera un comentario automático en el PR indicando:
+- El impacto del PR sobre la cobertura de código
+- El porcentaje de cobertura antes y después
+- Si la cobertura subió, bajó o se mantuvo
+- Enlaces a los reportes completos
+
+Esto se realiza mediante la integración de [Codecov](https://codecov.io/) y GitHub Actions. No requiere configuración adicional, solo tener el workflow y el archivo `codecov.yml` presentes.

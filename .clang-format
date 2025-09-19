@@ -51,7 +51,7 @@ AlignAfterOpenBracket: Align
 AlignOperands:   true
 AlignTrailingComments: true
 AlignConsecutiveAssignments: AcrossEmptyLinesAndComments
-AlignConsecutiveDeclarations: AcrossEmptyLinesAndComments
+AlignConsecutiveDeclarations: None
 AlignConsecutiveMacros: AcrossEmptyLinesAndComments
 AlignEscapedNewlines: Left
 

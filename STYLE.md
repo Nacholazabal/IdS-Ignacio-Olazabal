@@ -3,8 +3,8 @@
 This guide summarizes the conventions enforced by `.clang-format` and complements it with rules that the formatter cannot enforce.
 
 ## 1) Naming
-- **Functions:** `lower_snake_case`  
-- **Types (struct/enum/typedef):** `PascalCase`  
+- **Functions:** `lower_snake_case`
+- **Types (struct/enum/typedef):** `PascalCase`
 - **Macros & constants:** `UPPER_SNAKE_CASE` (optionally add project prefix, e.g., `LOOP_`)
 
 ## 2) Files & includes
@@ -53,7 +53,7 @@ typedef enum {
     ERR_IO,
 } ErrorCode;
 
-ErrorCode driver_init(Device *dev) 
+ErrorCode driver_init(Device *dev)
 {
     ErrorCode err = ERR_OK;
 

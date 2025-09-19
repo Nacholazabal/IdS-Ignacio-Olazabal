@@ -33,10 +33,12 @@ SPDX-License-Identifier: MIT
 
 /* === Headers files inclusions ================================================================ */
 
-#include <stdio.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+
 #include <unistd.h>
+
 #include "gpio.h"
 
 /* === Cabecera C++ ============================================================================ */
@@ -48,12 +50,12 @@ extern "C" {
 /* === Public macros definitions =============================================================== */
 
 /** \brief Application version */
-#define APP_VERSION_MAJOR   1
-#define APP_VERSION_MINOR   0
-#define APP_VERSION_PATCH   0
+#define APP_VERSION_MAJOR  1
+#define APP_VERSION_MINOR  0
+#define APP_VERSION_PATCH  0
 
 /** \brief Demo delay in seconds */
-#define DEMO_DELAY_SECONDS  1
+#define DEMO_DELAY_SECONDS 1
 
 /* === Public data type declarations =========================================================== */
 
@@ -63,17 +65,17 @@ extern "C" {
 
 /**
  * \brief Initialize the application
- * 
+ *
  * This function initializes all system components including GPIO,
  * peripherals, and displays startup information.
- * 
+ *
  * \return true if initialization was successful, false otherwise
  */
 bool app_init(void);
 
 /**
  * \brief Run the main application demo
- * 
+ *
  * This function runs a demonstration of the LED control system,
  * showing various GPIO operations and LED patterns.
  */
@@ -81,7 +83,7 @@ void app_run_demo(void);
 
 /**
  * \brief Display application information
- * 
+ *
  * This function displays application version and system information.
  */
 void app_display_info(void);

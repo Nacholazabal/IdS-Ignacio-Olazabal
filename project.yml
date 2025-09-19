@@ -1,0 +1,65 @@
+---
+
+:project:
+  :use_exceptions: FALSE
+  :use_test_preprocessor: :none
+  :use_auxiliary_dependencies: TRUE
+  :build_root: build
+  :release_build: FALSE
+  :test_file_prefix: test_
+
+:environment:
+
+:extension:
+  :executable: .out
+
+:paths:
+  :test:
+    - test/**
+  :source:
+    - src/**
+  :include:
+    - inc/**
+
+:defines:
+  :common: &common_defines []
+  :test:
+    - *common_defines
+    - TEST
+
+:cmock:
+  :mock_prefix: mock_
+  :when_no_prototypes: :warn
+  :enforce_strict_ordering: TRUE
+  :plugins:
+    - :ignore
+    - :callback
+    - :expect_any_args
+
+:tools:
+  # Ceedling defaults to using gcc for compiling, linking, etc.
+
+:flags:
+  :test:
+    :compile:
+      :*:
+        - -fprofile-arcs
+        - -ftest-coverage
+    :link:
+      :*:
+        - -fprofile-arcs
+        - -ftest-coverage
+        - -lgcov
+
+:plugins:
+  :enabled:
+    - module_generator
+    - gcov
+
+:gcov:
+  :reports:
+    - HtmlDetailed
+    - Text
+  :gcovr:
+    :html_medium_threshold: 75
+    :html_high_threshold: 90
