@@ -125,3 +125,11 @@ Scripts/output/*
 
 # Cache
 */__pycache__/*
+
+# Coverage files and reports
+coverage/
+*.gcda
+*.gcno
+*.gcov
+build/artifacts/gcov/
+build/gcov/
