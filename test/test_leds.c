@@ -162,3 +162,39 @@ void test_LedsDriver_ConsultarLedApagado(void)
     TEST_ASSERT_TRUE(leds_is_off(6));
     TEST_ASSERT_FALSE(leds_is_on(6));
 }
+
+// test para leds_turn_off con numeros invalidos
+void test_LedsDriver_ApagarLedFueraDeRango(void)
+{
+    registrar_error_ExpectAnyArgs();
+    leds_turn_off(0);
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_APAGADOS, puerto_virtual);
+
+    registrar_error_ExpectAnyArgs();
+    leds_turn_off(CANTIDAD_DE_LEDS + 1);
+    TEST_ASSERT_EQUAL_HEX16(TODO_LOS_LEDS_APAGADOS, puerto_virtual);
+}
+
+// test para leds_is_on con numeros invalidos
+void test_LedsDriver_ConsultarLedEncendidoFueraDeRango(void)
+{
+    registrar_error_ExpectAnyArgs();
+    bool result = leds_is_on(0);
+    TEST_ASSERT_FALSE(result);
+
+    registrar_error_ExpectAnyArgs();
+    result = leds_is_on(CANTIDAD_DE_LEDS + 1);
+    TEST_ASSERT_FALSE(result);
+}
+
+// test para leds_is_off con numeros invalidos
+void test_LedsDriver_ConsultarLedApagadoFueraDeRango(void)
+{
+    registrar_error_ExpectAnyArgs();
+    bool result = leds_is_off(0);
+    TEST_ASSERT_FALSE(result);
+
+    registrar_error_ExpectAnyArgs();
+    result = leds_is_off(CANTIDAD_DE_LEDS + 1);
+    TEST_ASSERT_FALSE(result);
+}
