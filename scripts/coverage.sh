@@ -39,10 +39,10 @@ if [ "$(ls -A coverage/*.gc* 2>/dev/null)" ]; then
     echo "📈 Generando reporte lcov..."
     
     # Capturar datos de cobertura
-    lcov --capture --directory . --output-file coverage/coverage.info --ignore-errors source
+    lcov --capture --directory . --output-file coverage/coverage.info --ignore-errors source,unused
     
     # Filtrar archivos no deseados
-    lcov --remove coverage/coverage.info '/usr/*' '*/test/*' '*/build/*' '*_runner.c' 'mock_*' '*unity*' '*cmock*' --output-file coverage/coverage_filtered.info
+    lcov --remove coverage/coverage.info '/usr/*' '*/test/*' '*/build/*' '*_runner.c' 'mock_*' '*unity*' '*cmock*' --output-file coverage/coverage_filtered.info --ignore-errors unused
     
     # Generar reporte HTML
     genhtml coverage/coverage_filtered.info --output-directory coverage/html --title "Cobertura de Código - LEDs Driver" --show-details --legend
